@@ -1,0 +1,5 @@
+objectsWorldGen README
+
+
+simple script to generate gazebo .world files
+run with: 'python objectsWorldGen.py' and follow program prompts
