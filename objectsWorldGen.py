@@ -10,7 +10,6 @@
 
 import os
 world = raw_input("Input world name: ")
-num_objects = input("Input the number of objects you plan to spawn: ")
 
 ################################################################################
 
@@ -93,6 +92,16 @@ while model != "done":
         models[num_objects].append(yaw)
         num_objects = num_objects + 1
 
+
+for i in range(0, num_objects):
+    print models[i][0]
+    print models[i][1]
+    print models[i][2]
+    print models[i][3]
+    print models[i][4]
+    print models[i][5]
+    print models[i][6]
+
 ############################################################################
 
 print >> f, """<?xml version="1.0" ?>
@@ -110,11 +119,11 @@ print >> f, """<?xml version="1.0" ?>
     </include>
     """
 
-for i in range (num_blocks):
+for i in range (num_objects):
     print >> f, """    <include>
-      <uri>model://%s</uri>
-      <pose>%f %f %f %f %f %f<pose>
-    </include>""" % (models[i][0], models[i][1], models[i][2], models[i][3], models[i][4], models[i][5], model[i][6])
+      <uri>model://%s</uri>""" % models[i][0]
+    print >> f, """      <pose>%s %s %s %s %s %s</pose>
+    </include>""" % (models[i][1], models[i][2], models[i][3], models[i][4], models[i][5], models[i][6])
 
 print >> f, """    </world>
-  </sdf>
+  </sdf>"""
