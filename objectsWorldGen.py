@@ -3,14 +3,21 @@
 # objectsWorldGen.py                                                           #
 #                                                                              #
 # Generates a world and launch files from user input                           #
-#                                                                               #
+#                                                                              #
 # Most of this is based on Mar Freeman's blocksWorldGen                        #
 #                                                                              #
 ################################################################################
 
 import os
+
+config = ""
+while (config != "Tabletop" or config != "Absolute"):
+    config = raw_input("Choose configuration ('Tabletop' or 'Absolute'): ")
+
 world = raw_input("Input world name: ")
 
+################################################################################
+################################### UNIVERSAL ##################################
 ################################################################################
 
 pr2_launch = "/opt/ros/indigo/share/pr2_gazebo/launch/pr2_%s.launch" % world
@@ -58,72 +65,139 @@ print  >> f, """<launch>
 sdf = "/usr/share/gazebo-2.2/worlds/%s.world" % world
 f = open(sdf, 'w+')
 
-################################################################################
-
 models = []
 print "Choose models from following: (CaseSensitive): "
 print(os.listdir("/home/kbailey/.gazebo/models"))
-
 num_objects = 0
 model = ""
-print("Enter object names separated by newlines (CaseSensitive, type 'done' to end)")
-while model != "done":
-    model = raw_input("Enter Model: ")
-    if model == "done":
-        break
-    elif not (os.path.exists("/home/kbailey/.gazebo/models/%s" % model)):
-        print("Model %s does not exist. Try again" % model)
-    else:
-        x = raw_input("Enter x: ")
-        y = raw_input("Enter y: ")
-        z = raw_input("Enter z: ")
-        roll = raw_input("Enter roll: ")
-        pitch = raw_input("Enter pitch: ")
-        yaw = raw_input("Enter yaw: ")
 
-        models.append([])
+################################################################################
+################################### ABSOLUTE ###################################
+################################################################################
 
-        models[num_objects].append(model)
-        models[num_objects].append(x)
-        models[num_objects].append(y)
-        models[num_objects].append(z)
-        models[num_objects].append(roll)
-        models[num_objects].append(pitch)
-        models[num_objects].append(yaw)
-        num_objects = num_objects + 1
+if config == "Absolute":
+    print("Enter object names separated by newlines (CaseSensitive, type 'done' to end)")
+    while model != "done":
+        model = raw_input("Enter Model: ")
+        if model == "done":
+            break
+        elif not (os.path.exists("/home/kbailey/.gazebo/models/%s" % model)):
+            print("Model %s does not exist. Try again" % model)
+        else:
+            x = raw_input("Enter x: ")
+            y = raw_input("Enter y: ")
+            z = raw_input("Enter z: ")
+            roll = raw_input("Enter roll: ")
+            pitch = raw_input("Enter pitch: ")
+            yaw = raw_input("Enter yaw: ")
 
+            models.append([])
 
-for i in range(0, num_objects):
-    print models[i][0]
-    print models[i][1]
-    print models[i][2]
-    print models[i][3]
-    print models[i][4]
-    print models[i][5]
-    print models[i][6]
+            models[num_objects].append(model)
+            models[num_objects].append(x)
+            models[num_objects].append(y)
+            models[num_objects].append(z)
+            models[num_objects].append(roll)
+            models[num_objects].append(pitch)
+            models[num_objects].append(yaw)
+            num_objects = num_objects + 1
+################################################################################
+    print >> f, """<?xml version="1.0" ?>
+    <sdf version="1.4">
+      <world name="default">
+        <include>
+          <uri>model://ground_plane</uri>
+        </include>
+        <include>
+          <uri>model://sun</uri>
+        </include>
+        <include>
+          <uri>model://short_table2</uri>
+          <pose>0.8 0 0 0 0 0</pose>
+        </include>
+        """
 
-############################################################################
+    for i in range (num_objects):
+        print >> f, """    <include>
+          <uri>model://%s</uri>""" % models[i][0]
+        print >> f, """      <pose>%s %s %s %s %s %s</pose>
+        </include>""" % (models[i][1], models[i][2], models[i][3], models[i][4], models[i][5], models[i][6])
 
-print >> f, """<?xml version="1.0" ?>
-<sdf version="1.4">
-  <world name="default">
-    <include>
-      <uri>model://ground_plane</uri>
-    </include>
-    <include>
-      <uri>model://sun</uri>
-    </include>
-    <include>
-      <uri>model://short_table2</uri>
-      <pose>0.8 0 0 0 0 0</pose>
-    </include>
-    """
+    print >> f, """    </world>
+      </sdf>"""
 
-for i in range (num_objects):
-    print >> f, """    <include>
-      <uri>model://%s</uri>""" % models[i][0]
-    print >> f, """      <pose>%s %s %s %s %s %s</pose>
-    </include>""" % (models[i][1], models[i][2], models[i][3], models[i][4], models[i][5], models[i][6])
+################################################################################
+################################## TABLETOP ####################################
+################################################################################
 
-print >> f, """    </world>
-  </sdf>"""
+else if config == "Tabletop":
+    print """
+
+  -0.75       -0.5         -0.25        0.0         0.25        0.5         0.75
+0.4  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+0.2  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+0.0  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+-0.2 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+-0.4 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+"""
+
+    print("Enter object names and dimensions separated by newlines (CaseSensitive, type 'done' to end)")
+    while model != "done":
+        model = raw_input("Enter Model: ")
+        if model == "done":
+            break
+        elif not (os.path.exists("/home/kbailey/.gazebo/models/%s" % model)):
+            print("Model %s does not exist. Try again" % model)
+        else:
+            x = raw_input("Enter x: ") + 0.8
+            y = raw_input("Enter y: ")
+
+            models.append([])
+
+            models[num_objects].append(model)
+            models[num_objects].append(x)
+            models[num_objects].append(y)
+
+            num_objects = num_objects + 1
+
+################################################################################
+    print >> f, """<?xml version="1.0" ?>
+    <sdf version="1.4">
+      <world name="default">
+        <include>
+          <uri>model://ground_plane</uri>
+        </include>
+        <include>
+          <uri>model://sun</uri>
+        </include>
+        <include>
+          <uri>model://short_table2</uri>
+          <pose>0.8 0 0 0 0 0</pose>
+        </include>
+        """
+
+    for i in range (num_objects):
+        print >> f, """    <include>
+          <uri>model://%s</uri>""" % models[i][0]
+        print >> f, """      <pose>%s %s 0.61 0 0 0</pose>
+        </include>""" % (models[i][1], models[i][2])
+
+    print >> f, """    </world>
+      </sdf>"""
