@@ -9,10 +9,20 @@
 ################################################################################
 
 import os
+import sys
 
 config = ""
-while (config != "Tabletop" or config != "Absolute"):
+home_path = os.getenv("HOME")
+
+print "Home path: '%s'" %home_path
+
+if (not(os.path.isdir("%s/.gazebo/models" %home_path))):
+    print "Gazebo models path set incorrectly. Exiting"
+    sys.exit()
+
+while (config != "Tabletop" and config != "Absolute"):
     config = raw_input("Choose configuration ('Tabletop' or 'Absolute'): ")
+    print "Entered: %s" % config
 
 world = raw_input("Input world name: ")
 
@@ -66,8 +76,6 @@ sdf = "/usr/share/gazebo-2.2/worlds/%s.world" % world
 f = open(sdf, 'w+')
 
 models = []
-print "Choose models from following: (CaseSensitive): "
-print(os.listdir("/home/kbailey/.gazebo/models"))
 num_objects = 0
 model = ""
 
@@ -78,10 +86,12 @@ model = ""
 if config == "Absolute":
     print("Enter object names separated by newlines (CaseSensitive, type 'done' to end)")
     while model != "done":
+        print "Choose models from following: (CaseSensitive): "
+        print(os.listdir("%s/.gazebo/models" %home_path))
         model = raw_input("Enter Model: ")
         if model == "done":
             break
-        elif not (os.path.exists("/home/kbailey/.gazebo/models/%s" % model)):
+        elif not (os.path.exists("%s/.gazebo/models/%s" %(home_path, model))):
             print("Model %s does not exist. Try again" % model)
         else:
             x = raw_input("Enter x: ")
@@ -130,50 +140,53 @@ if config == "Absolute":
 ################################## TABLETOP ####################################
 ################################################################################
 
-else if config == "Tabletop":
-    print """
-
-  -0.75       -0.5         -0.25        0.0         0.25        0.5         0.75
-0.4  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-0.2  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-0.0  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
--0.2 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
-     |     |     |     |     |     |     |     |     |     |     |     |     |
--0.4 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-
-"""
-
+elif config == "Tabletop":
     print("Enter object names and dimensions separated by newlines (CaseSensitive, type 'done' to end)")
     while model != "done":
+        print "Choose models from following: (CaseSensitive): "
+        print(os.listdir("%s/.gazebo/models" %home_path))
         model = raw_input("Enter Model: ")
         if model == "done":
             break
-        elif not (os.path.exists("/home/kbailey/.gazebo/models/%s" % model)):
+        elif not (os.path.exists("%s/.gazebo/models/%s" %(gazebo_models_path, model))):
             print("Model %s does not exist. Try again" % model)
         else:
-            x = raw_input("Enter x: ") + 0.8
-            y = raw_input("Enter y: ")
+            print """
+
+   -3.0  -2.5  -2.0  -1.5  -1.0  -0.5   0.0   0.5   1.0   1.5   2.0   2.5   3.0
+2.0  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+1.5 _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+1.0  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+0.5 _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+0.0  +-----+-----+-----+-----+----T+A-B-L+E-T-O+P----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+-0.5_|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+-1.0 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+-1.5_|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+     |     |     |     |     |     |     |     |     |     |     |     |     |
+-2.0 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+"""
+            x = float(raw_input("Enter x: "))/4 + 0.8
+            y = float(raw_input("Enter y: "))/5
 
             models.append([])
 
             models[num_objects].append(model)
             models[num_objects].append(x)
             models[num_objects].append(y)
+
+            print "Added object '%s' at (%f, %f)" %(model, x, y)
 
             num_objects = num_objects + 1
 
@@ -196,7 +209,7 @@ else if config == "Tabletop":
     for i in range (num_objects):
         print >> f, """    <include>
           <uri>model://%s</uri>""" % models[i][0]
-        print >> f, """      <pose>%s %s 0.61 0 0 0</pose>
+        print >> f, """      <pose>%f %f 0.61 0 0 0</pose>
         </include>""" % (models[i][1], models[i][2])
 
     print >> f, """    </world>

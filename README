@@ -1,5 +1,13 @@
 objectsWorldGen README
 
-
 simple script to generate gazebo .world files
-run with: 'python objectsWorldGen.py' and follow program prompts
+run with: 'sudo python objectsWorldGen.py' and follow prompts
+
+IMPORTANT:
+    Must run with sudo in order to write files in correct directories 
+
+TABLETOP CONFIGURATION: 
+    The tabletop configuration offers a diagram of tabletop surface with coordinates to more easily place objects on testing space. You can choose x and y coordinates anywhere in Gazebo space but the z-coordinate is set at table height.
+
+ABSOLUTE CONFIGURATION:
+    The absolute configuration allows more customizable placement of objects anywhere in Gazebo 3D space and allows for the addition of pitch, roll, and yaw parameters on the objects. 
