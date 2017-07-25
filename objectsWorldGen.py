@@ -88,7 +88,7 @@ if config == "Absolute":
     while model != "done":
         print "Choose models from following: (CaseSensitive): "
         print(os.listdir("%s/.gazebo/models" %home_path))
-        model = raw_input("Enter Model: ")
+        model = raw_input("Enter Model or type 'done': ")
         if model == "done":
             break
         elif not (os.path.exists("%s/.gazebo/models/%s" %(home_path, model))):
@@ -145,7 +145,7 @@ elif config == "Tabletop":
     while model != "done":
         print "Choose models from following: (CaseSensitive): "
         print(os.listdir("%s/.gazebo/models" %home_path))
-        model = raw_input("Enter Model: ")
+        model = raw_input("Enter Model or type 'done': ")
         if model == "done":
             break
         elif not (os.path.exists("%s/.gazebo/models/%s" %(home_path, model))):
