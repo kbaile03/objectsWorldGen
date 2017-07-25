@@ -128,13 +128,13 @@ if config == "Absolute":
         """
 
     for i in range (num_objects):
-        print >> f, """    <include>
+        print >> f, """        <include>
           <uri>model://%s</uri>""" % models[i][0]
-        print >> f, """      <pose>%s %s %s %s %s %s</pose>
+        print >> f, """          <pose>%s %s %s %s %s %s</pose>
         </include>""" % (models[i][1], models[i][2], models[i][3], models[i][4], models[i][5], models[i][6])
 
-    print >> f, """    </world>
-      </sdf>"""
+    print >> f, """      </world>
+    </sdf>"""
 
 ################################################################################
 ################################## TABLETOP ####################################
@@ -148,7 +148,7 @@ elif config == "Tabletop":
         model = raw_input("Enter Model: ")
         if model == "done":
             break
-        elif not (os.path.exists("%s/.gazebo/models/%s" %(gazebo_models_path, model))):
+        elif not (os.path.exists("%s/.gazebo/models/%s" %(home_path, model))):
             print("Model %s does not exist. Try again" % model)
         else:
             print """
@@ -207,10 +207,10 @@ elif config == "Tabletop":
         """
 
     for i in range (num_objects):
-        print >> f, """    <include>
+        print >> f, """        <include>
           <uri>model://%s</uri>""" % models[i][0]
-        print >> f, """      <pose>%f %f 0.61 0 0 0</pose>
+        print >> f, """          <pose>%f %f 0.61 0 0 0</pose>
         </include>""" % (models[i][1], models[i][2])
 
-    print >> f, """    </world>
-      </sdf>"""
+    print >> f, """      </world>
+    </sdf>"""
