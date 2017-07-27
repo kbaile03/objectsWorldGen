@@ -1,6 +1,7 @@
 objectsWorldGen README
 
-simple script to generate gazebo .world files
+simple script to generate gazebo .world and .launch files
+output is three files: "world_name.world", "world_name.launch" and "pr2_world_name.launch"
 run with: 'sudo python objectsWorldGen.py' and follow prompts
 
 IMPORTANT:

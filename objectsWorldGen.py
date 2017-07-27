@@ -22,7 +22,7 @@ if (not(os.path.isdir("%s/.gazebo/models" %home_path))):
 
 while (config != "Tabletop" and config != "Absolute"):
     config = raw_input("Choose configuration ('Tabletop' or 'Absolute'): ")
-    print "Entered: %s" % config
+    print "Entered: %s" %config
 
 world = raw_input("Input world name: ")
 
@@ -30,7 +30,7 @@ world = raw_input("Input world name: ")
 ################################### UNIVERSAL ##################################
 ################################################################################
 
-pr2_launch = "/opt/ros/indigo/share/pr2_gazebo/launch/pr2_%s.launch" % world
+pr2_launch = "/opt/ros/indigo/share/pr2_gazebo/launch/pr2_%s.launch" %world
 f = open(pr2_launch, 'w+')
 
 print >> f, """<launch>
@@ -51,11 +51,11 @@ print >> f, """<launch>
   <!-- start pr2 robot -->
   <include file="$(find pr2_gazebo)/launch/pr2.launch"/>
 
-</launch>""" % world
+</launch>""" %world
 
 ################################################################################
 
-launch = "/opt/ros/indigo/share/gazebo_ros/launch/%s.launch" % world
+launch = "/opt/ros/indigo/share/gazebo_ros/launch/%s.launch" %world
 f = open(launch, 'w+')
 
 print  >> f, """<launch>
@@ -68,11 +68,11 @@ print  >> f, """<launch>
     <arg name="debug" value="false"/>
   </include>
 
-</launch>""" % world
+</launch>""" %world
 
 ################################################################################
 
-sdf = "/usr/share/gazebo-2.2/worlds/%s.world" % world
+sdf = "/usr/share/gazebo-2.2/worlds/%s.world" %world
 f = open(sdf, 'w+')
 
 models = []
@@ -111,30 +111,32 @@ if config == "Absolute":
             models[num_objects].append(pitch)
             models[num_objects].append(yaw)
             num_objects = num_objects + 1
+
 ################################################################################
     print >> f, """<?xml version="1.0" ?>
-    <sdf version="1.4">
-      <world name="default">
-        <include>
-          <uri>model://ground_plane</uri>
-        </include>
-        <include>
-          <uri>model://sun</uri>
-        </include>
-        <include>
-          <uri>model://short_table2</uri>
-          <pose>0.8 0 0 0 0 0</pose>
-        </include>
-        """
+  <sdf version="1.4">
+    <world name="%s_world">
+      <include>
+        <uri>model://ground_plane</uri>
+      </include>
+      <include>
+        <uri>model://sun</uri>
+      </include>
+      <include>
+        <uri>model://short_table2</uri>
+        <name>short_table2</name>
+        <pose>0.8 0 0 0 0 0</pose>
+      </include>""" %world
 
     for i in range (num_objects):
-        print >> f, """        <include>
-          <uri>model://%s</uri>""" % models[i][0]
-        print >> f, """          <pose>%s %s %s %s %s %s</pose>
-        </include>""" % (models[i][1], models[i][2], models[i][3], models[i][4], models[i][5], models[i][6])
+        print >> f, """       <include>
+        <uri>model://%s</uri>
+        <name>%s</name>""" %(models[i][0], models[i][0])
+        print >> f, """        <pose>%s %s %s %s %s %s</pose>
+      </include>""" % (models[i][1], models[i][2], models[i][3], models[i][4], models[i][5], models[i][6])
 
-    print >> f, """      </world>
-    </sdf>"""
+    print >> f, """    </world>
+  </sdf>"""
 
 ################################################################################
 ################################## TABLETOP ####################################
@@ -149,7 +151,7 @@ elif config == "Tabletop":
         if model == "done":
             break
         elif not (os.path.exists("%s/.gazebo/models/%s" %(home_path, model))):
-            print("Model %s does not exist. Try again" % model)
+            print("Model %s does not exist. Try again" %model)
         else:
             print """
 
@@ -175,7 +177,6 @@ elif config == "Tabletop":
      |     |     |     |     |     |     |     |     |     |     |     |     |
      |     |     |     |     |     |     |     |     |     |     |     |     |
 -2.0 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
-
 """
             x = float(raw_input("Enter x: "))/4 + 0.8
             y = float(raw_input("Enter y: "))/5
@@ -191,26 +192,28 @@ elif config == "Tabletop":
             num_objects = num_objects + 1
 
 ################################################################################
+
     print >> f, """<?xml version="1.0" ?>
-    <sdf version="1.4">
-      <world name="default">
-        <include>
-          <uri>model://ground_plane</uri>
-        </include>
-        <include>
-          <uri>model://sun</uri>
-        </include>
-        <include>
-          <uri>model://short_table2</uri>
-          <pose>0.8 0 0 0 0 0</pose>
-        </include>
-        """
+  <sdf version="1.4">
+    <world name="%s_world">
+      <include>
+        <uri>model://ground_plane</uri>
+      </include>
+      <include>
+        <uri>model://sun</uri>
+      </include>
+      <include>
+        <uri>model://short_table2</uri>
+        <name>short_table2</name>
+        <pose>0.8 0 0 0 0 0</pose>
+      </include>""" %world
 
     for i in range (num_objects):
-        print >> f, """        <include>
-          <uri>model://%s</uri>""" % models[i][0]
-        print >> f, """          <pose>%f %f 0.61 0 0 0</pose>
-        </include>""" % (models[i][1], models[i][2])
+        print >> f, """      <include>
+        <uri>model://%s</uri>
+        <name>%s</name>""" %(models[i][0], models[i][0])
+        print >> f, """        <pose>%f %f 0.61 0 0 0</pose>
+      </include>""" % (models[i][1], models[i][2])
 
-    print >> f, """      </world>
-    </sdf>"""
+    print >> f, """    </world>
+  </sdf>"""
