@@ -50,6 +50,7 @@ print >> f, """<launch>
 
   <!-- start pr2 robot -->
   <include file="$(find pr2_gazebo)/launch/pr2.launch"/>
+  <include file="$(find pr2_moveit_config)/launch/move_group.launch"/>
 
 </launch>""" %world
 
