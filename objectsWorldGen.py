@@ -156,7 +156,7 @@ elif config == "Tabletop":
         else:
             print """
 
-   -3.0  -2.5  -2.0  -1.5  -1.0  -0.5   0.0   0.5   1.0   1.5   2.0   2.5   3.0
+   -3.0  -2.5  -2.0  -1.5  -1.0  -0.5   0.0   0.5   1.0   1.5   2.0   2.5   3.0 x
 2.0  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
      |     |     |     |     |     |     |     |     |     |     |     |     |
 1.5 _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|_ _ _|
@@ -178,9 +178,10 @@ elif config == "Tabletop":
      |     |     |     |     |     |     |     |     |     |     |     |     |
      |     |     |     |     |     |     |     |     |     |     |     |     |
 -2.0 +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+  y
 """
-            x = float(raw_input("Enter x: "))/4 + 0.8
-            y = float(raw_input("Enter y: "))/5
+            x = float(raw_input("Enter x: "))/5
+            y = float(raw_input("Enter y: "))/4 + 0.8
 
             models.append([])
 
@@ -214,7 +215,7 @@ elif config == "Tabletop":
         <uri>model://%s</uri>
         <name>%s</name>""" %(models[i][0], models[i][0])
         print >> f, """        <pose>%f %f 0.61 0 0 0</pose>
-      </include>""" % (models[i][1], models[i][2])
+      </include>""" % (models[i][2], models[i][1])
 
     print >> f, """    </world>
   </sdf>"""
