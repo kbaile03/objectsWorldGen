@@ -6,6 +6,8 @@ run with: 'sudo python objectsWorldGen.py' and follow prompts
 
 IMPORTANT:
     Must run with sudo in order to write files in correct directories 
+    If launch files do not run, try catkin_make clean and catkin_make in your catkin_ws and 
+. ~/catkin_ws/devel/setup.bash
 
 TABLETOP CONFIGURATION: 
     The tabletop configuration offers a diagram of tabletop surface with coordinates to more easily place objects on testing space. You can choose x and y coordinates anywhere in Gazebo space but the z-coordinate is set at table height.

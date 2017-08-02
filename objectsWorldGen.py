@@ -123,11 +123,7 @@ if config == "Absolute":
       <include>
         <uri>model://sun</uri>
       </include>
-      <include>
-        <uri>model://short_table2</uri>
-        <name>short_table2</name>
-        <pose>0.8 0 0 0 0 0</pose>
-      </include>""" %world
+      """ %world
 
     for i in range (num_objects):
         print >> f, """       <include>
@@ -144,6 +140,7 @@ if config == "Absolute":
 ################################################################################
 
 elif config == "Tabletop":
+    table_height = float(raw_input("Enter table height in meters: ")) + -0.6
     print("Enter object names and dimensions separated by newlines (CaseSensitive, type 'done' to end)")
     while model != "done":
         print "Choose models from following: (CaseSensitive): "
@@ -207,15 +204,15 @@ elif config == "Tabletop":
       <include>
         <uri>model://short_table2</uri>
         <name>short_table2</name>
-        <pose>0.8 0 0 0 0 0</pose>
-      </include>""" %world
+        <pose>0.8 0 %f 0 0 0</pose>
+      </include>""" % (world, table_height)
 
     for i in range (num_objects):
         print >> f, """      <include>
         <uri>model://%s</uri>
         <name>%s</name>""" %(models[i][0], models[i][0])
-        print >> f, """        <pose>%f %f 0.61 0 0 0</pose>
-      </include>""" % (models[i][2], models[i][1])
+        print >> f, """        <pose>%f %f %f 0 0 0</pose>
+      </include>""" % (models[i][2], models[i][1], table_height + .61)
 
     print >> f, """    </world>
   </sdf>"""
