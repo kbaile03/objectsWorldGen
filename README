@@ -1,16 +1,55 @@
-objectsWorldGen README
+objectsWorldGen README - Kennedy Bailey
 
-simple script to generate gazebo .world and .launch files
-output is three files: "world_name.world", "world_name.launch" and "pr2_world_name.launch"
-run with: 'sudo python objectsWorldGen.py' and follow prompts
+Simple script to generate gazebo .world and .launch files
 
-IMPORTANT:
-    Must run with sudo in order to write files in correct directories 
-    If launch files do not run, try catkin_make clean and catkin_make in your catkin_ws and 
-. ~/catkin_ws/devel/setup.bash
+Output is three files: "world_name.world", "world_name.launch" and 
+    "pr2_world_name.launch"
+
+This output automatically includes Moveit's move_group.launch file so it does not
+    have to be started separately when the pr2 component is going to be used.
+
+HUMAN OPTION:
+    If 'y' is selected, a model of a human is spawned at (0.5, 1.0, 0.0).
 
 TABLETOP CONFIGURATION: 
-    The tabletop configuration offers a diagram of tabletop surface with coordinates to more easily place objects on testing space. You can choose x and y coordinates anywhere in Gazebo space but the z-coordinate is set at table height.
+    The tabletop configuration spawns a tabletop surface automatically,
+        and offers a diagram of the tabletop with coordinates to more 
+        easily place objects on testing space. You can choose x and y 
+        coordinates anywhere in Gazebo space but the z-coordinate is 
+        set at table height. Spawns flatter objects on top of unit boxes
+        for easier discovery by vision.
 
 ABSOLUTE CONFIGURATION:
-    The absolute configuration allows more customizable placement of objects anywhere in Gazebo 3D space and allows for the addition of pitch, roll, and yaw parameters on the objects. 
+    The absolute configuration allows more customizable placement of 
+        objects anywhere in Gazebo 3D space and allows for the addition 
+        of pitch, roll, and yaw parameters on the objects.
+
+IMPORTANT:
+    - Dependencies: 
+        - ros pr2_gazebo package ("sudo apt-get install ros-indigo-pr2-gazebo")
+        - gazebo_ros package ("sudo apt-get install ros-indigo-gazebo-ros")
+
+    - Install Directories:
+        - gazebo models dir must be: "$HOME/.gazebo/models"
+    
+        - pr2_gazebo package dir must be "/opt/ros/indigo/share/pr2_gazebo"
+            - launch file is written here.
+    
+        - gazebo_ros package dir must be "/opt/ros/indigo/share/gazebo_ros"
+            - launch file is written here.
+
+        - gazebo worlds dir must be "/usr/share/gazebo-2.2/worlds"
+            - world file is written here.
+
+        - Note: If the program seg faults, it's likely that one or more of 
+            these directories is incorrect.
+
+    - Run: to run, enter 'sudo python objectsWorldGen.py' and follow prompts.
+        In order to use a created launch file, one must catkin_make clean and
+        catkin_make from one's catkin_ws.
+
+    - Debug: If launch files do not run, try "killall gazebo", resetting your
+        terminal, "catkin_make clean" and "catkin_make" from your catkin_ws and 
+        ". ~/catkin_ws/devel/setup.bash" before roslaunching again.
+
+

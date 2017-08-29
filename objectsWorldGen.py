@@ -2,7 +2,7 @@
 # Kennedy Bailey                                                               #
 # objectsWorldGen.py                                                           #
 #                                                                              #
-# Generates a world and launch files from user input                           #
+# Generates a world and launch files from user input with various input options#
 #                                                                              #
 # Most of this is based on Mar Freeman's blocksWorldGen                        #
 #                                                                              #
@@ -11,7 +11,11 @@
 import os
 import sys
 
+#initialization
+
 config = ""
+human = "u"
+
 home_path = os.getenv("HOME")
 
 print "Home path: '%s'" %home_path
@@ -19,6 +23,12 @@ print "Home path: '%s'" %home_path
 if (not(os.path.isdir("%s/.gazebo/models" %home_path))):
     print "Gazebo models path set incorrectly. Exiting"
     sys.exit()
+
+#set config variables
+
+while (human != "y" and human != "n"):
+    human = raw_input("Choose if human in scene (y / n): ")
+
 
 while (config != "Tabletop" and config != "Absolute"):
     config = raw_input("Choose configuration ('Tabletop' or 'Absolute'): ")
@@ -29,6 +39,8 @@ world = raw_input("Input world name: ")
 ################################################################################
 ################################### UNIVERSAL ##################################
 ################################################################################
+
+# writes "universal" files - pr2_world.launch and world.launch
 
 pr2_launch = "/opt/ros/indigo/share/pr2_gazebo/launch/pr2_%s.launch" %world
 f = open(pr2_launch, 'w+')
@@ -83,6 +95,8 @@ model = ""
 ################################################################################
 ################################### ABSOLUTE ###################################
 ################################################################################
+
+# writes sdf file for absolute configuration
 
 if config == "Absolute":
     print("Enter object names separated by newlines (CaseSensitive, type 'done' to end)")
@@ -139,8 +153,10 @@ if config == "Absolute":
 ################################## TABLETOP ####################################
 ################################################################################
 
+# writes sdf file for tabletop configuration
+
 elif config == "Tabletop":
-    table_height = float(raw_input("Enter table height in meters: ")) + -0.6
+    table_height = float(raw_input("Enter table height in meters (usually .65): ")) + -0.6
     print("Enter object names and dimensions separated by newlines (CaseSensitive, type 'done' to end)")
     while model != "done":
         print "Choose models from following: (CaseSensitive): "
@@ -206,13 +222,28 @@ elif config == "Tabletop":
         <name>short_table2</name>
         <pose>0.8 0 %f 0 0 0</pose>
       </include>""" % (world, table_height)
+    if (human == "y"):
+        print >> f, """      <include>
+        <uri>model://human</uri>
+        <name>human</name>
+        <pose>0.5 1 0 0 0 0</pose>
+      </include> """
 
     for i in range (num_objects):
+        temp_height = table_height
+        if (models[i][0] == "pencil" or models[i][0] == "pen" or models[i][0] == "plate" or models[i][0] == "comb" or models[i][0] == "dry_erase_marker" or models[i][0] == "butter_knife" or models[i][0] == "fork" or models[i][0] == "spatula" or models[i][0] == "wooden_spoon" or models[i][0] == "ping_pong_paddle" or models[i][0] == "screwdriver" or models[i][0] == "spoon" or models[i][0] == "sharpie" or models[i][0] == "kitchen_knife"):
+            print >> f, """      <include>
+        <uri>model://block_pedestal</uri>
+        <name>block_pedestal</name>
+        <pose>%f %f %f 0 0 0</pose>
+      </include>""" % (models[i][2], models[i][1], table_height + .61)
+            temp_height = table_height + .05
+            
         print >> f, """      <include>
         <uri>model://%s</uri>
         <name>%s</name>""" %(models[i][0], models[i][0])
         print >> f, """        <pose>%f %f %f 0 0 0</pose>
-      </include>""" % (models[i][2], models[i][1], table_height + .61)
+      </include>""" % (models[i][2], models[i][1], temp_height + .61)
 
     print >> f, """    </world>
   </sdf>"""
