@@ -5,8 +5,11 @@ Simple script to generate gazebo .world and .launch files
 Output is three files: "world_name.world", "world_name.launch" and 
     "pr2_world_name.launch"
 
-This output automatically includes Moveit's move_group.launch file so it does not
-    have to be started separately when the pr2 component is going to be used.
+This output automatically includes Moveit's move_group.launch file so it does 
+    not have to be started separately when the pr2 component is going to be 
+    used.
+
+-------------------------------------------------------------------------------
 
 HUMAN OPTION:
     If 'y' is selected, a model of a human is spawned at (0.5, 1.0, 0.0).
@@ -48,8 +51,14 @@ IMPORTANT:
         In order to use a created launch file, one must catkin_make clean and
         catkin_make from one's catkin_ws.
 
-    - Debug: If launch files do not run, try "killall gazebo", resetting your
+    - Debug: 
+        - If launch files do not run, try "killall gazebo", resetting your
         terminal, "catkin_make clean" and "catkin_make" from your catkin_ws and 
         ". ~/catkin_ws/devel/setup.bash" before roslaunching again.
 
+        - If the table height is too high, objects may spawn and intersect with
+        pr2 model, causing many problems, so be mindful of the table height
+        (a good starting height is about .6 or less; don't be afraid to rewrite
+        the same world and launch files with different parameters by running the
+        script again with the same world name and different parameters).
 

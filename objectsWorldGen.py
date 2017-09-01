@@ -236,8 +236,8 @@ elif config == "Tabletop":
         <uri>model://block_pedestal</uri>
         <name>block_pedestal</name>
         <pose>%f %f %f 0 0 0</pose>
-      </include>""" % (models[i][2], models[i][1], table_height + .61)
-            temp_height = table_height + .05
+      </include>""" % (models[i][2], models[i][1], table_height + .605)
+            temp_height = table_height + .1
             
         print >> f, """      <include>
         <uri>model://%s</uri>
